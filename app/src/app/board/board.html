@@ -1,0 +1,23 @@
+<h3 class="title">Board</h3>
+<form ng-submit="board.submit()">
+    <h1>Create new order</h1>
+
+    <input type="text" name="task" ng-model="board.task" placeholder="Insert the task title...">
+    <input type="submit" value="Create">
+</form>
+<hr />
+<div class="boards">
+  <div ng-repeat="col in board.boards">
+    <h5>{{ col }}</h5>
+    <ul dnd-list="board.tasks[col]">
+      <li ng-repeat="item in board.tasks[col]"
+        dnd-draggable="item"
+        dnd-moved="board.tasks[col].splice($index, 1)"
+        dnd-effect-allowed="move"
+        dnd-dragend="board.dropEnd()"
+        >
+          {{ item.title }}
+      </li>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,23 @@
+{
+  "name": "jumper-ai",
+  "version": "1.0.0",
+  "description": "Jumper.ai test",
+  "main": "index.js",
+  "author": "Albert Sabaté",
+  "license": "MIT",
+  "dependencies": {
+    "express": "4.13.4"
+  },
+  "devDependencies": {
+    "eslint": "^4.18.2",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.9.0",
+    "pm2": "^2.10.1"
+  },
+  "scripts": {
+    "start": "pm2 start ./index.js --name=JAI --watch",
+    "stop": "pm2 stop JAI --watch",
+    "delete": "pm2 delete JAI",
+    "logs": "pm2 logs JAI"
+  }
+}
