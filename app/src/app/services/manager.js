@@ -35,6 +35,7 @@ class ManagerService {
         ...this.tasks,
         {
           title: title,
+          user: this.getAlias(),
           column: 1,
           position: (this.tasks.filter(task => task.column === 1).length + 1),
         }

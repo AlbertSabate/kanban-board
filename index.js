@@ -4,6 +4,18 @@ const path = require('path');
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 const port = process.env.PORT || 3000;
+const mongoose = require('mongoose');
+
+// Mongoose connection
+mongoose.connect('mongodb://localhost/jumper-ai');
+
+// Mongoose Model
+const Task = mongoose.model('Task', {
+  title: String,
+  user: String,
+  column: Number,
+  position: Number,
+});
 
 server.listen(port, () => {
   console.log('Server listening at port %d', port);
@@ -15,38 +27,63 @@ app.use(express.static(path.join(__dirname, 'app/dist')));
 // Socket
 io.on('connection', (socket) => {
   socket.on('get tasks', () => {
-    // @TODO Get tasks with mongoose
+    Task.find({}, (err, docs) => {
+      if (!err){
+        socket.emit('get tasks', {
+          tasks: docs,
+        });
 
-    socket.emit('get tasks', {
-      tasks: socket.tasks,
+        return true;
+      }
+
+      throw err;
     });
   });
 
   socket.on('add task', (tasks) => {
     socket.tasks = tasks;
 
-    // @TODO Save tasks with mongoose
+    Task.remove({}, () => {
+      const tasks = socket.tasks.map(task => new Task({
+        title: task.title,
+        user: task.user,
+        column: task.column,
+        position: task.position,
+      }));
 
-    socket.emit('added task', {
-      success: true,
-    });
+      Task.collection.insert(tasks)
+        .then((data) => {
+          socket.emit('added task', {
+            success: true,
+          });
 
-    socket.broadcast.emit('update tasks', {
-      tasks: socket.tasks,
+          socket.broadcast.emit('update tasks', {
+            tasks: socket.tasks,
+          });
+        });
     });
   });
 
   socket.on('change task', (tasks) => {
     socket.tasks = tasks;
+    Task.remove({}, () => {
+      const tasks = socket.tasks.map(task => new Task({
+        title: task.title,
+        user: task.user,
+        column: task.column,
+        position: task.position,
+      }));
 
-    // @TODO Save tasks with mongoose
+      Task.collection.insert(tasks)
+        .then((data) => {
+          socket.emit('changed task', {
+            success: true,
+          });
 
-    socket.emit('changed task', {
-      success: true,
-    });
-
-    socket.broadcast.emit('update tasks', {
-      tasks: socket.tasks,
+          socket.broadcast.emit('update tasks', {
+            tasks: socket.tasks,
+          });
+        });
     });
   });
 });
