@@ -5,8 +5,6 @@ const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 const port = process.env.PORT || 3000;
 
-// @TODO Add mongoose
-
 server.listen(port, () => {
   console.log('Server listening at port %d', port);
 });
@@ -16,25 +14,39 @@ app.use(express.static(path.join(__dirname, 'app/dist')));
 
 // Socket
 io.on('connection', (socket) => {
+  socket.on('get tasks', () => {
+    // @TODO Get tasks with mongoose
+
+    socket.emit('get tasks', {
+      tasks: socket.tasks,
+    });
+  });
+
   socket.on('add task', (tasks) => {
     socket.tasks = tasks;
 
-    socket.emit('added', {
+    // @TODO Save tasks with mongoose
+
+    socket.emit('added task', {
       success: true,
     });
 
-    socket.broadcast.emit('added task', {
-      tasks: socket.tasks
+    socket.broadcast.emit('update tasks', {
+      tasks: socket.tasks,
     });
   });
 
   socket.on('change task', (tasks) => {
-    socket.emit('changed', {
+    socket.tasks = tasks;
+
+    // @TODO Save tasks with mongoose
+
+    socket.emit('changed task', {
       success: true,
     });
 
-    socket.broadcast.emit('change task', {
-      tasks: tasks,
+    socket.broadcast.emit('update tasks', {
+      tasks: socket.tasks,
     });
   });
 });

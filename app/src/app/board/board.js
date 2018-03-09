@@ -14,11 +14,28 @@ export class BoardCtrl {
 
     this.tasks = manager.getTasks();
 
-    manager.loadTasks().then(() => {
-        this.tasks = manager.getTasks();
+    manager.loadTasks().then((tasks) => {
+      manager.setTasks(tasks);
+
+      this.tasks = manager.getTasks();
+      this.$scope.$apply();
+      toastr.success('Tasks loaded!');
+    }).catch(() => {
+      toastr.error('No tasks on board!');
     });
 
     this.boards = Object.keys(this.tasks);
+    manager.socket.on('update tasks', (data) => {
+      this.manager.setTasks(data.tasks);
+      this.tasks = manager.getTasks();
+      this.$scope.$apply();
+
+      toastr.success('Updating tasks...');
+    });
+  }
+
+  getName() {
+    return this.manager.getAlias();
   }
 
   dropEnd() {

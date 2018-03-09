@@ -1,6 +1,7 @@
 class ManagerService {
   constructor($rootScope) {
     this.$rootScope = $rootScope;
+    this.socket = io();
     this.alias = '';
     this.tasks = [];
   }
@@ -16,48 +17,79 @@ class ManagerService {
   }
 
   loadTasks() {
-    return Promise.resolve();
+    return new Promise((resolve, reject) => {
+      this.socket.emit('get tasks');
+      this.socket.on('get tasks', (data) => {
+        if (data.tasks) {
+          return resolve(data.tasks);
+        }
+
+        return reject();
+      });
+    });
   }
 
   createTask(title) {
-    this.tasks = [
-      ...this.tasks,
-      {
-        title: title,
-        column: 1,
-        position: (this.tasks.filter(task => task.column === 1).length + 1),
-      }
-    ];
+    return new Promise((resolve, reject) => {
+      this.tasks = [
+        ...this.tasks,
+        {
+          title: title,
+          column: 1,
+          position: (this.tasks.filter(task => task.column === 1).length + 1),
+        }
+      ];
 
-    return Promise.resolve();
+      this.socket.emit('add task', this.tasks);
+      this.socket.on('added task', (data) => {
+        if (data.success) {
+          return resolve();
+        }
+
+        return reject();
+      });
+    });
   }
 
   changeTasks(tasks) {
-    let tasksList = Object.keys(tasks).map(col => tasks[col].map((task, i) => {
-      task.position = i;
-      switch(col) {
-        case 'new':
-          task.column = 1;
-          break;
-        case 'process':
-          task.column = 2;
-          break;
-        default:
-          task.column = 3;
-      }
+    return new Promise((resolve, reject) => {
+      let tasksList = Object.keys(tasks).map(col => tasks[col].map((task, i) => {
+        task.position = i;
+        switch(col) {
+          case 'new':
+            task.column = 1;
+            break;
+          case 'process':
+            task.column = 2;
+            break;
+          default:
+            task.column = 3;
+        }
 
-      return task;
-    }));
+        return task;
+      }));
 
-    tasksList = [
-      ...tasksList[0],
-      ...tasksList[1],
-      ...tasksList[2],
-    ];
+      tasksList = [
+        ...tasksList[0],
+        ...tasksList[1],
+        ...tasksList[2],
+      ];
 
-    this.tasks = tasksList;
+      this.tasks = tasksList;
 
-    return Promise.resolve();
+      this.socket.emit('change task', this.tasks);
+      this.socket.on('changed task', (data) => {
+        if (data.success) {
+          return resolve();
+        }
+
+        return reject();
+      });
+    });
+  }
+
+  setTasks(tasks) {
+    this.tasks = tasks;
   }
 
   getTasks() {
