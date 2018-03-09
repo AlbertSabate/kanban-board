@@ -1,5 +1,11 @@
 # Jumper AI
 
+## Requirements
+- NodeJS > 6.9
+- NPM
+- Docker
+- Mongo Client
+
 ## How to use
 
 ```
@@ -8,6 +14,9 @@ $ cd app
 $ npm install
 $ npm run build
 $ cd ..
+$ mkdir data
+$ docker run -d -p 27017:27017 -v $PWD/data:/data/db mongo
+$ mongo localhost/jumper-ai
 $ node index.js
 ```
 

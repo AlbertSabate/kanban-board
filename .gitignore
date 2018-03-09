@@ -4,3 +4,4 @@ coverage
 .git
 .DS_Store
 app/dist
+data
