@@ -5,3 +5,4 @@ coverage
 .DS_Store
 app/dist
 data
+server/config.js

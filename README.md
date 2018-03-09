@@ -17,6 +17,7 @@ $ cd ..
 $ mkdir data
 $ docker run -d -p 27017:27017 -v $PWD/data:/data/db mongo
 $ mongo localhost/jumper-ai
+$ cp server/config.dist.js server/config.js
 $ node index.js
 ```
 
