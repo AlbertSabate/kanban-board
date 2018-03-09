@@ -6,7 +6,9 @@
   "author": "Albert Sabaté",
   "license": "MIT",
   "dependencies": {
-    "express": "4.13.4"
+    "express": "4.13.4",
+    "mongoose": "^5.0.9",
+    "socket.io": "^2.0.4"
   },
   "devDependencies": {
     "eslint": "^4.18.2",
