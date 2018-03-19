@@ -16,9 +16,9 @@
 </div>
 
 <div class="row justify-content-md-center bg-w-transparent m-3 p-3 rounded">
-  <div class="col" ng-repeat="col in board.boards">
+  <div class="col text-center" ng-repeat="col in board.boards">
     <h3>{{ col }}</h3>
-    <ul class="text-center rounded" dnd-list="board.tasks[col]">
+    <ul class="rounded" dnd-list="board.tasks[col]">
       <li ng-repeat="item in board.tasks[col]"
         dnd-draggable="item"
         dnd-moved="board.tasks[col].splice($index, 1)"
