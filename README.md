@@ -23,3 +23,6 @@ $ npm start
 
 And point your browser to `http://localhost:3000`. Optionally, specify
 a port by supplying the `PORT` env variable.
+
+To test socket.io in your browser, you can open 2 or more incognito tabs,
+on this way you can do changes in one window and see in real time how change in anothers.

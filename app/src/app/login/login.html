@@ -1,6 +1,15 @@
-<form ng-submit="login.submit()">
-    <h1>Select your alias</h1>
-
-    <input type="text" name="alias" ng-model="login.alias" placeholder="Insert your alias...">
-    <input type="submit" value="Go!">
-</form>
+<div class="row h-full justify-content-md-center align-items-center">
+  <div class="col-8 p-5 rounded bg-w-transparent">
+    <form ng-submit="login.submit()">
+      <div class="form-group">
+        <label>Select your username</label>
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" name="alias" ng-model="login.alias" placeholder="Recipient's username">
+          <div class="input-group-append">
+            <input type="submit" class="btn btn-primary" type="button" value="Go!" />
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

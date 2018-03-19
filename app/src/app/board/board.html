@@ -1,15 +1,24 @@
-<h3 class="title">Hi, {{ board.getName() }}</h3>
-<form ng-submit="board.submit()">
-    <h1>Create new order</h1>
+<h3 class="title m-4">Welcome, {{ board.getName() }}</h3>
+<div class="row justify-content-md-center m-3 p-3 rounded bg-w-transparent">
+  <div class="col">
+    <form ng-submit="board.submit()">
+      <div class="form-group">
+        <label>Insert the task title</label>
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" name="task" ng-model="board.task" placeholder="Insert the task title...">
+          <div class="input-group-append">
+            <input type="submit" class="btn btn-primary" type="button" value="Create" />
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
 
-    <input type="text" name="task" ng-model="board.task" placeholder="Insert the task title...">
-    <input type="submit" value="Create">
-</form>
-<hr />
-<div class="boards">
-  <div ng-repeat="col in board.boards">
-    <h5>{{ col }}</h5>
-    <ul dnd-list="board.tasks[col]">
+<div class="row justify-content-md-center bg-w-transparent m-3 p-3 rounded">
+  <div class="col" ng-repeat="col in board.boards">
+    <h3>{{ col }}</h3>
+    <ul class="text-center rounded" dnd-list="board.tasks[col]">
       <li ng-repeat="item in board.tasks[col]"
         dnd-draggable="item"
         dnd-moved="board.tasks[col].splice($index, 1)"
