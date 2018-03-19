@@ -1,13 +1,15 @@
 class ManagerService {
-  constructor($rootScope) {
+  constructor($rootScope, $window) {
     this.$rootScope = $rootScope;
+    this.$window = $window;
     this.socket = io();
-    this.alias = '';
+    this.alias = $window.sessionStorage.getItem('JAI_ALIAS');
     this.tasks = [];
   }
 
   setAlias(alias) {
     this.alias = alias;
+    this.$window.sessionStorage.setItem('JAI_ALIAS', alias);
 
     this.$rootScope.$broadcast('set-alias');
   }
